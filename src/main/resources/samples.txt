@@ -1,0 +1,8 @@
+{
+	"classification": "good",
+	"text": "Bank of Nova Scotia (BNS ) . It has remained steadily profitable over the past year and is growing earnings. Therefore, BNS continues to reward shareholders including a significant dividend.The company recently declared a $0.74 per share dividend (in Canadian currency) payable on Oct. 27, 2016, to shareholders of record at the close of business on Oct. 4, 2016."
+},
+{
+	"classification": "bad",
+	"text": "What Are Your Dividends For? The obvious and probably most common response is that owning stocks that pay dividends is a smart, conservative way of investing. And companies that pay regular dividends tend to be larger, more financially stable and less risky than companies that don’t pay dividends."
+}

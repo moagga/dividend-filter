@@ -22,13 +22,18 @@ public class BayesianFilter {
 	private List<Feature> features = new ArrayList<>();
 	
 	public BayesianFilter() {
-		features.add(new KeywordFeature(new String[]{"dividend", "distribution", "result"}));
+		features.add(new KeywordFeature("dividend"));
+		features.add(new KeywordFeature("distribution"));
+		features.add(new KeywordFeature("result"));
 		features.add(new TickerFeature());
 	}
 	
 	public void train(Collection<String> words, boolean good){
 		for (Feature feature : features) {
-			incrementFeatureCount(feature, good);
+			boolean exist = feature.exists(words);
+			if (exist){
+				incrementFeatureCount(feature, good);
+			}
 		}
 		if (good){
 			goodClassificationCount++;
@@ -38,28 +43,31 @@ public class BayesianFilter {
 		count++;
 	}
 	
-	public double evaluate(Collection<String> words){
-		double p = 0.0;
+	public double evaluate(Collection<String> words, boolean good){
+		double p = 1.0;
 		for (Feature feature : features) {
 			boolean exist = feature.exists(words);
 			if (exist){
-				p = p* featureProbability(feature, exist);
+				p = p* featureProbability(feature, good);
 			}
-			incrementFeatureCount(feature, exist);
 		}
 		double classificationProbability = goodClassificationCount * 1.0 / count;
-		
-		count++;
 		return p * classificationProbability;
 	}
 	
 	private double featureProbability(Feature f, boolean good){
-		//TODO Add weight
+		double baseProbability = 0.5;
+		int weight = 1;
+		
 		Map<Feature, Integer> map = good ? featureGoodCount : featureBadCount;
-		int fCount = map.get(f);
+		int fCount = 0;
+		if (map.containsKey(f)){
+			fCount = map.get(f);
+		}
 		int cCount = good ? goodClassificationCount : badClassificationCount;
 		
-		return fCount * 1.0 / cCount;
+		double p = (weight * baseProbability + fCount) / (weight + cCount);
+		return p;
 	}
 	
 	private void incrementFeatureCount(Feature f, boolean good){
@@ -68,6 +76,12 @@ public class BayesianFilter {
 			map.put(f, 0);
 		}
 		int value = map.get(f);
-		map.put(f, value++);
+		value++;
+		map.put(f, value);
+	}
+	
+	@Override
+	public String toString() {
+		return featureGoodCount + "," + featureBadCount;
 	}
 }

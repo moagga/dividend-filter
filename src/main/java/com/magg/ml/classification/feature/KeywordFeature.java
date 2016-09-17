@@ -7,23 +7,25 @@ import java.util.stream.Stream;
 
 public class KeywordFeature implements Feature{
 
-	private Set<String> keywords;
+	private String keyword;
 	
-	public KeywordFeature(String[] keywords) {
-		this.keywords = new HashSet<>();
-		for(String word : keywords){
-			this.keywords.add(word.toLowerCase().trim());
-		}
+	public KeywordFeature(String keyword) {
+		this.keyword = keyword;
 	}
 
 	@Override
 	public boolean exists(Collection<String> words) {
 		for (String word : words) {
-			if (keywords.contains(word.toLowerCase().trim())){
+			if (keyword.equals(word.toLowerCase().trim())){
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return keyword;
 	}
 
 }

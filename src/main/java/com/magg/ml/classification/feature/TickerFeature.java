@@ -48,5 +48,9 @@ public class TickerFeature implements Feature{
 			}
 		}
 	}
-	
+
+	@Override
+	public String toString() {
+		return "nyse-tickers.txt";
+	}
 }

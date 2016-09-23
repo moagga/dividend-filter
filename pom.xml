@@ -9,9 +9,16 @@
 
   <name>dividend-filter</name>
   <url>http://maven.apache.org</url>
+  
+  <parent>
+ 	    <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.0.RELEASE</version>
+  </parent>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
   </properties>
 
   <dependencies>
@@ -20,6 +27,10 @@
 	  <artifactId>jsoup</artifactId>
 	  <version>1.9.2</version>
 	</dependency>
+	<dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -27,4 +38,13 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <build>
+     <plugins>
+         <plugin>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-maven-plugin</artifactId>
+         </plugin>
+     </plugins>
+  </build>
 </project>

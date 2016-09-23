@@ -6,12 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import com.magg.ml.classification.feature.AmountFeature;
 import com.magg.ml.classification.feature.DateFeature;
 import com.magg.ml.classification.feature.Feature;
 import com.magg.ml.classification.feature.KeywordFeature;
 import com.magg.ml.classification.feature.TickerFeature;
 
+@Component
 public class BayesianFilter {
 
 	private int goodClassificationCount = 0;

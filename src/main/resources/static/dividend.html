@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dividend Filter</title>
+		<script src="jquery-3.1.1.min.js"></script>
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+	</head>
+
+<body>
+	<div class="jumbotron">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<label for="basic-url">Your vanity URL</label>
+					<div class="input-group">
+	  				<textarea id="text" class="form-control" placeholder="Enter dividend article text here" rows="8" cols="80"></textarea>
+					</div>
+					<a id="evaluate" class="btn btn-default" href="#" role="button">Evaluate</a>
+				</div>
+				<div class="col-lg-6">
+					<ul class="list-group">
+	  				<li class="list-group-item">
+	    				<span class="badge" id="good"></span>
+	    				Probability for cash dividend
+	  				</li>
+						<li class="list-group-item">
+	    				<span class="badge" id="bad"></span>
+	    				Probability for not cash dividend
+	  				</li>
+					</ul>
+					<a id="accept" class="btn btn-default" href="#" role="button">Accept</a>
+					<a id="reject" class="btn btn-default" href="#" role="button">Reject</a>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+$('#evaluate').click(function(){
+	$.ajax({
+	  type: "POST",
+		headers: {
+      "Accept" : "application/json",
+			"Content-Type" : "text/plain"
+    },
+	  url: "/evaluate",
+	  data: $('#text').val()
+	}).done(function(json){
+		// var json = JSON.parse(data);
+		$('#good').html(json.good);
+		$('#bad').html(json.bad);
+	});
+});
+$('#accept').click(function(){
+	$.ajax({
+	  type: "POST",
+		headers: {
+      "Accept" : "application/json",
+			"Content-Type" : "text/plain"
+    },
+	  url: "/accept",
+	  data: $('#text').val()
+	});
+});
+$('#reject').click(function(){
+	$.ajax({
+	  type: "POST",
+		headers: {
+      "Accept" : "application/json",
+			"Content-Type" : "text/plain"
+    },
+	  url: "/reject",
+	  data: $('#text').val()
+	});
+});
+
+</script>
+</html>

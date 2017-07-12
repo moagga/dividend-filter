@@ -5,6 +5,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -31,28 +32,55 @@ public class SeekingAlphaCrawler {
         System.out.println(path);
         Stream<String> urls = Files.lines(path);
 
-        int alreadyProcessed = progressInfo();
+        int alreadyProcessed = progressInfo(positive);
         Stream<String> toBeProcessed = urls.skip(alreadyProcessed).sequential();
         AtomicInteger index = new AtomicInteger(0);
         toBeProcessed.forEach((url) -> {
-            Article article = new Article("www.a.com");
-            //            Article article = scraper.scrap(url);
-            save(article, positive, index.incrementAndGet());
-            updateProgress();
-            //            try {
-            //                Thread.sleep(5000);
-            //            } catch (Exception e) {
-            //            }
+        	try {
+				System.out.println("Processing:" + positive + ":" + index.get());
+				Article article = scraper.scrap(url);
+				save(article, positive, index.incrementAndGet());
+				updateProgress(positive, index.get());
+				    try {
+				        Thread.sleep(5000);
+				    } catch (Exception e) {
+				    }
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Exception encountered while crawling.Exiting");
+				System.exit(0);
+			}
         });
         urls.close();
     }
 
-    private int progressInfo() {
-        return 0;
+    private int progressInfo(boolean positive) {
+    	int index = 0;
+    	String progressFileName = BASE_PATH + (positive ? ".positive" : ".negative") + ".progress.txt";
+    	try {
+    		Path filePath = FileSystems.getDefault().getPath(progressFileName);
+    		if (Files.exists(filePath)){
+				String number = Files.readAllLines(filePath).get(0);
+				index = Integer.parseInt(number);
+			}
+    	} catch (IOException e) {
+				e.printStackTrace();
+        }
+
+        return index;
     }
 
-    private void updateProgress() {
-
+    private void updateProgress(boolean positive, int index) {
+    	String progressFileName = BASE_PATH + (positive ? ".positive" : ".negative") + ".progress.txt";
+    	try {
+    		Path filePath = FileSystems.getDefault().getPath(progressFileName);
+    		if (!Files.exists(filePath)){
+				filePath = Files.createFile(filePath);
+			}
+    		Files.write(filePath, Arrays.asList(new String[]{index + ""}));
+    	} catch (IOException e) {
+				e.printStackTrace();
+        }
     }
 
     private void save(Article article, boolean positive, int index) {

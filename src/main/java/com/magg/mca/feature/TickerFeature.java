@@ -1,23 +1,27 @@
-package com.magg.mca.extract;
+package com.magg.mca.feature;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.magg.mca.Article;
+import com.magg.mca.SampleBuilder;
 
-public class TickerCountFeature {
+public class TickerFeature extends Feature {
 
-	private Pattern pattern;
-	
-	public TickerCountFeature() {
+	protected final Pattern pattern;
+
+	public TickerFeature() {
 		pattern = Pattern.compile("\\([A-Z]*:?[A-Z]*\\)");
 	}
 	
-	public void extract(Article article){
+	public void extract(Article article, SampleBuilder builder){
 		int count = 0;
 		count += count(article.getHeadings());
 		count += count(article.getParagraphs());
+		
+		builder.addFeatureValue("TICKERS_PRESENT", count == 0 ? "N" : "Y");
+		builder.addFeatureValue("TICKERS_COUNT", count);
 	}
 	
 	private int count(List<String> lines){
@@ -30,5 +34,6 @@ public class TickerCountFeature {
 		}
 		return count;
 	}
-	
+
+
 }
